@@ -13,6 +13,27 @@ void main(){
     vColor = vec4(aColor.x,aColor.x,aColor.x,aColor.x);
 }`
 function formatFragment(content: string) {
+    let mainImageFuc=`mainImage(gl_FragColor,vTextureCoord);`;
+    let lines=content.split("\n");
+    let entry:string;
+    for(let i=0;i<lines.length;i++){
+        if(lines[i].indexOf("void mainImage")>=0){
+            entry=lines[i];
+            break;
+        }
+    }
+    if(!entry){
+        console.error("在 chunk 未找到 mainImage 函数,请检查是否为标准shadertoy代码..");
+    }else{
+        // let start=content.indexOf(entry);
+        // let end=content.indexOf("}",start);
+        // let entryWholeText=content.substring(start,end);
+        content=content.replace(/fragCoord/g,"fragCoord_");
+        
+        if(entry.indexOf("in sampler2D iChannel0")>0){
+            mainImageFuc=`mainImage(gl_FragColor,vTextureCoord,uSampler);`
+        }
+    }
     return `
 precision highp float;
     
@@ -32,7 +53,7 @@ uniform float mouseY;
 #define iMouse vec3(mouseX,mouseY,0.0)
 ${content}
 void main(){
-    mainImage(gl_FragColor,vTextureCoord);
+    ${mainImageFuc}
 }`
 }
 /**

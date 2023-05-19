@@ -143,7 +143,7 @@ class Main extends egret.DisplayObjectContainer {
         textfield.y = 135;
         this.textfield = textfield;
 
-        sky.filters = [new ShaderToy(shadertoy.Octagrams, { debug: true })];
+        sky.filters = [new ShaderToy(shadertoy.FlyingIntoDigitalTunnel, { debug: true })];
     }
 
     /**

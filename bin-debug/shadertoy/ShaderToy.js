@@ -10,7 +10,28 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var vertexSrc = "\nattribute vec2 aVertexPosition;    \nattribute vec2 aTextureCoord;\nattribute vec2 aColor;\nuniform vec2 projectionVector;\nconst vec2 center = vec2(-1.0, 1.0);\nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nvoid main(){\n    gl_Position=vec4((aVertexPosition/projectionVector) + center,0.0,1.0);\n    vTextureCoord = aTextureCoord;\n    vColor = vec4(aColor.x,aColor.x,aColor.x,aColor.x);\n}";
 function formatFragment(content) {
-    return "\nprecision highp float;\n    \nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nuniform sampler2D uSampler;\nuniform float iTime;\nuniform float iTimeDelta;\nuniform float iFrame;\nuniform float mouseX;\nuniform float mouseY;\n#define fragCoord=vTextureCoord\n#define iResolution vec2(1.0,1.0)\n// #define iTime 1.0\n// #define iTimeDelta 1.0\n// #define iFrame 1.0\n#define iMouse vec3(mouseX,mouseY,0.0)\n" + content + "\nvoid main(){\n    mainImage(gl_FragColor,vTextureCoord);\n}";
+    var mainImageFuc = "mainImage(gl_FragColor,vTextureCoord);";
+    var lines = content.split("\n");
+    var entry;
+    for (var i = 0; i < lines.length; i++) {
+        if (lines[i].indexOf("void mainImage") >= 0) {
+            entry = lines[i];
+            break;
+        }
+    }
+    if (!entry) {
+        console.error("在 chunk 未找到 mainImage 函数,请检查是否为标准shadertoy代码..");
+    }
+    else {
+        // let start=content.indexOf(entry);
+        // let end=content.indexOf("}",start);
+        // let entryWholeText=content.substring(start,end);
+        content = content.replace(/fragCoord/g, "fragCoord_");
+        if (entry.indexOf("in sampler2D iChannel0") > 0) {
+            mainImageFuc = "mainImage(gl_FragColor,vTextureCoord,uSampler);";
+        }
+    }
+    return "\nprecision highp float;\n    \nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nuniform sampler2D uSampler;\nuniform float iTime;\nuniform float iTimeDelta;\nuniform float iFrame;\nuniform float mouseX;\nuniform float mouseY;\n#define fragCoord=vTextureCoord\n#define iResolution vec2(1.0,1.0)\n// #define iTime 1.0\n// #define iTimeDelta 1.0\n// #define iFrame 1.0\n#define iMouse vec3(mouseX,mouseY,0.0)\n" + content + "\nvoid main(){\n    " + mainImageFuc + "\n}";
 }
 /**
  *
