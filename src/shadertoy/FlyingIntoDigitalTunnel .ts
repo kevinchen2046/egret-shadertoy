@@ -194,7 +194,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ,in sampler2D iChannel0)
     vec4 tColor=texture2D(iChannel0,fragCoord+fragCoord*(hitPoint.xy*0.01));
     // vec4 tColor=texture2D(iChannel0,fragCoord+fragCoord*(0.01*sdf.a));
     // vec4 tColor=texture2D(iChannel0,fragCoord+fragCoord*(hitPoint.xy*0.01)*(0.5*sdf.a));
-    fragColor = vec4(color, 1.0)*tColor*10.0;
+    fragColor = vec4(color, 1.0)*tColor*12.0;
 }
 `
 }
