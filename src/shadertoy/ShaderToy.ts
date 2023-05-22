@@ -31,7 +31,7 @@ function formatFragment(content: string) {
         content=content.replace(/fragCoord/g,"fragCoord_");
         
         if(entry.indexOf("in sampler2D iChannel0")>0){
-            mainImageFuc=`mainImage(gl_FragColor,vTextureCoord,uSampler);`
+            mainImageFuc=`mainImage(gl_FragColor,vTextureCoord,uSampler);`;
         }
     }
     return `
