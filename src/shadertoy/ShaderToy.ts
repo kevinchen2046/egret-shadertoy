@@ -13,25 +13,25 @@ void main(){
     vColor = vec4(aColor.x,aColor.x,aColor.x,aColor.x);
 }`
 function formatFragment(content: string) {
-    let mainImageFuc=`mainImage(gl_FragColor,vTextureCoord);`;
-    let lines=content.split("\n");
-    let entry:string;
-    for(let i=0;i<lines.length;i++){
-        if(lines[i].indexOf("void mainImage")>=0){
-            entry=lines[i];
+    let mainImageFuc = `mainImage(gl_FragColor,vTextureCoord);`;
+    let lines = content.split("\n");
+    let entry: string;
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].indexOf("void mainImage") >= 0) {
+            entry = lines[i];
             break;
         }
     }
-    if(!entry){
+    if (!entry) {
         console.error("在 chunk 未找到 mainImage 函数,请检查是否为标准shadertoy代码..");
-    }else{
+    } else {
         // let start=content.indexOf(entry);
         // let end=content.indexOf("}",start);
         // let entryWholeText=content.substring(start,end);
-        content=content.replace(/fragCoord/g,"fragCoord_");
-        
-        if(entry.indexOf("in sampler2D iChannel0")>0){
-            mainImageFuc=`mainImage(gl_FragColor,vTextureCoord,uSampler);`;
+        content = content.replace(/fragCoord/g, "fragCoord_");
+
+        if (entry.indexOf("in sampler2D iChannel0") > 0) {
+            mainImageFuc = `mainImage(gl_FragColor,vTextureCoord,uSampler);`;
         }
     }
     return `
@@ -45,6 +45,8 @@ uniform float iTimeDelta;
 uniform float iFrame;
 uniform float mouseX;
 uniform float mouseY;
+uniform float iWidth;
+uniform float iHeight;
 #define fragCoord=vTextureCoord
 #define iResolution vec2(1.0,1.0)
 // #define iTime 1.0
@@ -68,7 +70,7 @@ class ShaderToy extends egret.CustomFilter {
     public iFrame: number;
     public iMouse: egret.Point;
 
-    constructor(fragmentSrc: string, options?: { debug?: boolean }) {
+    constructor(fragmentSrc: string, options?: { debug?: boolean, width?: number, height?: number }) {
         fragmentSrc = formatFragment(fragmentSrc);
         if (options && options.debug) {
             console.log(vertexSrc.split("\n").map((v, i) => `${i + 1} : ${v}`).join("\n"));
@@ -80,10 +82,17 @@ class ShaderToy extends egret.CustomFilter {
         this.iTime = this.uniforms["iTime"] = egret.getTimer() / 1000;
         this.iTimeDelta = this.uniforms["iFrame"] = 0;
         this.iFrame = this.uniforms["iTimeDelta"] = 0;
-
+        this.uniforms["iWidth"] = options && options.width ? options.width : 1.0;
+        this.uniforms["iHeight"] = options && options.height ? options.height : 1.0;
         egret.lifecycle.stage.addEventListener(egret.Event.ENTER_FRAME, this.updateRenderer, this);
     }
 
+    set width(v: number) {
+        this.uniforms["iWidth"] = v;
+    }
+    set height(v: number) {
+        this.uniforms["iHeight"] = v;
+    }
     private updateRenderer() {
         let time = egret.getTimer() / 1000;
         this.iTimeDelta = time - this.iTime;

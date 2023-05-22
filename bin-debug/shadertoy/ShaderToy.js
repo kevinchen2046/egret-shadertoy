@@ -31,7 +31,7 @@ function formatFragment(content) {
             mainImageFuc = "mainImage(gl_FragColor,vTextureCoord,uSampler);";
         }
     }
-    return "\nprecision highp float;\n    \nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nuniform sampler2D uSampler;\nuniform float iTime;\nuniform float iTimeDelta;\nuniform float iFrame;\nuniform float mouseX;\nuniform float mouseY;\n#define fragCoord=vTextureCoord\n#define iResolution vec2(1.0,1.0)\n// #define iTime 1.0\n// #define iTimeDelta 1.0\n// #define iFrame 1.0\n#define iMouse vec3(mouseX,mouseY,0.0)\n" + content + "\nvoid main(){\n    " + mainImageFuc + "\n}";
+    return "\nprecision highp float;\n    \nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nuniform sampler2D uSampler;\nuniform float iTime;\nuniform float iTimeDelta;\nuniform float iFrame;\nuniform float mouseX;\nuniform float mouseY;\nuniform float iWidth;\nuniform float iHeight;\n#define fragCoord=vTextureCoord\n#define iResolution vec2(1.0,1.0)\n// #define iTime 1.0\n// #define iTimeDelta 1.0\n// #define iFrame 1.0\n#define iMouse vec3(mouseX,mouseY,0.0)\n" + content + "\nvoid main(){\n    " + mainImageFuc + "\n}";
 }
 /**
  *
@@ -53,9 +53,25 @@ var ShaderToy = (function (_super) {
         _this.iTime = _this.uniforms["iTime"] = egret.getTimer() / 1000;
         _this.iTimeDelta = _this.uniforms["iFrame"] = 0;
         _this.iFrame = _this.uniforms["iTimeDelta"] = 0;
+        _this.uniforms["iWidth"] = options && options.width ? options.width : 1.0;
+        _this.uniforms["iHeight"] = options && options.height ? options.height : 1.0;
         egret.lifecycle.stage.addEventListener(egret.Event.ENTER_FRAME, _this.updateRenderer, _this);
         return _this;
     }
+    Object.defineProperty(ShaderToy.prototype, "width", {
+        set: function (v) {
+            this.uniforms["iWidth"] = v;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ShaderToy.prototype, "height", {
+        set: function (v) {
+            this.uniforms["iHeight"] = v;
+        },
+        enumerable: true,
+        configurable: true
+    });
     ShaderToy.prototype.updateRenderer = function () {
         var time = egret.getTimer() / 1000;
         this.iTimeDelta = time - this.iTime;

@@ -8,13 +8,19 @@
 		"libs/modules/promise/promise.js"
 	],
 	"game": [
+		"bin-debug/shadertoy/Introduction.js",
 		"bin-debug/LoadingUI.js",
-		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
+		"bin-debug/shadertoy/CineShader.js",
 		"bin-debug/shadertoy/Colorello.js",
 		"bin-debug/shadertoy/FlyingIntoDigitalTunnel .js",
+		"bin-debug/shadertoy/HappyJumping.js",
+		"bin-debug/Main.js",
 		"bin-debug/shadertoy/Octagrams.js",
 		"bin-debug/shadertoy/PathToTheColorfulInfinity.js",
-		"bin-debug/shadertoy/ShaderToy.js"
+		"bin-debug/shadertoy/Seascape.js",
+		"bin-debug/shadertoy/ShaderToy.js",
+		"bin-debug/shadertoy/Silexars.js",
+		"bin-debug/shadertoy/Starleidoscope.js"
 	]
 }

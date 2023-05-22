@@ -1,0 +1,4 @@
+var shadertoy;
+(function (shadertoy) {
+    shadertoy.Silexars = "\n    // http://www.pouet.net/prod.php?which=57245\n    // If you intend to reuse this shader, please add credits to 'Danilo Guanabara'\n    \n    #define t iTime\n    #define r iResolution.xy\n    \n    void mainImage( out vec4 fragColor, in vec2 fragCoord,in sampler2D iChannel0){\n        vec2 uv=vec2(fragCoord.x,fragCoord.y);\n        fragCoord.y*=iHeight/iWidth;\n        fragCoord.y-=(1.-iWidth/iHeight);\n        vec3 c;\n        float l,z=t;\n        for(int i=0;i<3;i++) {\n            vec2 uv,p=fragCoord.xy/r;\n            uv=p;\n            p-=.5;\n            p.x*=r.x/r.y;\n            z+=.07;\n            l=length(p);\n            uv+=p/l*(sin(z)+1.)*abs(sin(l*9.-z-z));\n            c[i]=.01/length(mod(uv,1.)-.5);\n        }\n        vec4 tColor=texture2D(iChannel0,uv);\n        fragColor=(vec4(c/l,t)*0.8)+tColor;\n    }";
+})(shadertoy || (shadertoy = {}));
