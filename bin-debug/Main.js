@@ -156,7 +156,7 @@ var Main = (function (_super) {
         var stageH = this.stage.stageHeight;
         sky.width = stageW;
         sky.height = stageH;
-        sky.filters = [new ShaderToy(shadertoy.UniverseWithin, { debug: true })];
+        sky.filters = [new ShaderToy(shadertoy.Starleidoscope, { debug: true })];
         var topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);

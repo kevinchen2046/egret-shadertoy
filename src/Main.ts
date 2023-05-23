@@ -99,7 +99,7 @@ class Main extends egret.DisplayObjectContainer {
         let stageH = this.stage.stageHeight;
         sky.width = stageW;
         sky.height = stageH;
-        sky.filters = [new ShaderToy(shadertoy.UniverseWithin, { debug: true})];
+        sky.filters = [new ShaderToy(shadertoy.Starleidoscope, { debug: true})];
 
         let topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
