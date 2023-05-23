@@ -1,0 +1,4 @@
+var shadertoy;
+(function (shadertoy) {
+    shadertoy.Synergy = "\n/* \"Synergy\" by @kishimisu (2023) - https://www.shadertoy.com/view/ms3XWl \nA 31-seconds seamless loop directed by trigonometry\n*/\n \n void mainImage(out vec4 O, vec2 F ,in sampler2D iChannel0) {\n     vec2 uv=F.xy;\n     F.y*=uTextureSize.y/uTextureSize.x;\n     F.y-=(1.-uTextureSize.x/uTextureSize.y);\n     vec2   g  = iResolution.xy,\n            o  = (F+F-g)/g.y/.7; \n            \n     float f = iTime*.4-2.;\n     vec4 col= O.xyzw;\n     col *= 0.;\n     vec4 CColor=texture2D(iChannel0,uv);\n\n     for (float l= 0.; l< 55.;l++){ \n        vec4 value=.005/abs(length(o+ vec2(cos(l*(cos(f*.5)*.5+.6)+f), sin(l+f)))-(sin(l+f*4.)*.04+.02))*(cos(l+length(o)*4.+vec4(0,1,2,0))+1.);\n        col +=value;\n        CColor+=value;\n     }\n     \n     O=col*CColor;\n }";
+})(shadertoy || (shadertoy = {}));

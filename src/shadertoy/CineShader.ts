@@ -43,8 +43,8 @@ module shadertoy {
     }
     
     void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
-        fragCoord.y*=iHeight/iWidth;
-        fragCoord.y-=(1.-iWidth/iHeight);
+        fragCoord.y*=uTextureSize.y/uTextureSize.x;
+        fragCoord.y-=(1.-uTextureSize.x/uTextureSize.y);
         vec2 p = (fragCoord.xy * 2.0 - iResolution.xy) / min(iResolution.x, iResolution.y);
     
         vec3 cPos = vec3(0.0,0.0, -3.0 * iTime);

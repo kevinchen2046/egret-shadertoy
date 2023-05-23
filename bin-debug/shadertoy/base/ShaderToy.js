@@ -31,7 +31,11 @@ function formatFragment(content) {
             mainImageFuc = "mainImage(gl_FragColor,vTextureCoord,uSampler);";
         }
     }
-    return "\nprecision highp float;\n    \nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nuniform sampler2D uSampler;\nuniform float iTime;\nuniform float iTimeDelta;\nuniform float iFrame;\nuniform float mouseX;\nuniform float mouseY;\nuniform float iWidth;\nuniform float iHeight;\n#define fragCoord=vTextureCoord\n#define iResolution vec2(1.0,1.0)\n// #define iTime 1.0\n// #define iTimeDelta 1.0\n// #define iFrame 1.0\n#define iMouse vec3(mouseX,mouseY,0.0)\n" + content + "\nvoid main(){\n    " + mainImageFuc + "\n}";
+    var precision = "precision mediump float;";
+    if (content.indexOf("precision highp float") >= 0) {
+        precision = "precision highp float;";
+    }
+    return "\n" + precision + "\n    \nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nuniform sampler2D uSampler;\nuniform vec2 projectionVector;\nuniform vec2 uTextureSize;\nuniform float iTime;\nuniform float iTimeDelta;\nuniform float iFrame;\nuniform float mouseX;\nuniform float mouseY;\n// #define fragCoord=vTextureCoord\n#define iResolution vec2(1.0,1.0)\n#define iMouse vec3(mouseX,mouseY,0.5)\n" + content + "\nvoid main(){\n    " + mainImageFuc + "\n}";
 }
 /**
  *
@@ -44,34 +48,36 @@ var ShaderToy = (function (_super) {
     function ShaderToy(fragmentSrc, options) {
         var _this = this;
         fragmentSrc = formatFragment(fragmentSrc);
-        if (options && options.debug) {
-            console.log(vertexSrc.split("\n").map(function (v, i) { return i + 1 + " : " + v; }).join("\n"));
-            console.log(fragmentSrc.split("\n").map(function (v, i) { return i + 1 + " : " + v; }).join("\n"));
-        }
         _this = _super.call(this, vertexSrc, fragmentSrc) || this;
+        if (options && options.debug) {
+            _this.log(vertexSrc, "[ vertex ] :");
+            _this.log(fragmentSrc, "[ fragment ] :");
+        }
         _this.iMouse = new egret.Point();
+        _this.iMouse.setTo(0.5, 0.5);
         _this.iTime = _this.uniforms["iTime"] = egret.getTimer() / 1000;
         _this.iTimeDelta = _this.uniforms["iFrame"] = 0;
         _this.iFrame = _this.uniforms["iTimeDelta"] = 0;
-        _this.uniforms["iWidth"] = options && options.width ? options.width : 1.0;
-        _this.uniforms["iHeight"] = options && options.height ? options.height : 1.0;
+        // this.uniforms["iWidth"] = options && options.width ? options.width : 1.0;
+        // this.uniforms["iHeight"] = options && options.height ? options.height : 1.0;
         egret.lifecycle.stage.addEventListener(egret.Event.ENTER_FRAME, _this.updateRenderer, _this);
         return _this;
     }
-    Object.defineProperty(ShaderToy.prototype, "width", {
-        set: function (v) {
-            this.uniforms["iWidth"] = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ShaderToy.prototype, "height", {
-        set: function (v) {
-            this.uniforms["iHeight"] = v;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    ShaderToy.prototype.log = function (code, title) {
+        console.log((title ? title + "\n" : "") + code.split("\n").map(function (v, i) {
+            var o = (i + 1) + '';
+            var total = 4 - o.length;
+            while (total--)
+                o += "-";
+            return o + "| " + v;
+        }).join("\n"));
+    };
+    // set width(v: number) {
+    //     this.uniforms["iWidth"] = v;
+    // }
+    // set height(v: number) {
+    //     this.uniforms["iHeight"] = v;
+    // }
     ShaderToy.prototype.updateRenderer = function () {
         var time = egret.getTimer() / 1000;
         this.iTimeDelta = time - this.iTime;

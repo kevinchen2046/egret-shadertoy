@@ -193,7 +193,7 @@ var Main = (function (_super) {
         textfield.x = 172;
         textfield.y = 135;
         this.textfield = textfield;
-        sky.filters = [new ShaderToy(shadertoy.Starleidoscope, { debug: true, width: sky.width, height: sky.height })];
+        sky.filters = [new ShaderToy(shadertoy.Synergy, { debug: true })];
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。

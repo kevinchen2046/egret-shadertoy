@@ -34,30 +34,32 @@ function formatFragment(content: string) {
             mainImageFuc = `mainImage(gl_FragColor,vTextureCoord,uSampler);`;
         }
     }
+    let precision = `precision mediump float;`;
+    if (content.indexOf("precision highp float") >= 0) {
+        precision = `precision highp float;`;
+    }
     return `
-precision highp float;
+${precision}
     
 varying vec2 vTextureCoord;
 varying vec4 vColor;
 uniform sampler2D uSampler;
+uniform vec2 projectionVector;
+uniform vec2 uTextureSize;
 uniform float iTime;
 uniform float iTimeDelta;
 uniform float iFrame;
 uniform float mouseX;
 uniform float mouseY;
-uniform float iWidth;
-uniform float iHeight;
-#define fragCoord=vTextureCoord
+// #define fragCoord=vTextureCoord
 #define iResolution vec2(1.0,1.0)
-// #define iTime 1.0
-// #define iTimeDelta 1.0
-// #define iFrame 1.0
-#define iMouse vec3(mouseX,mouseY,0.0)
+#define iMouse vec3(mouseX,mouseY,0.5)
 ${content}
 void main(){
     ${mainImageFuc}
 }`
 }
+
 /**
  * 
  * 需要注意的是 shadertoy的渲染主函数
@@ -70,29 +72,38 @@ class ShaderToy extends egret.CustomFilter {
     public iFrame: number;
     public iMouse: egret.Point;
 
-    constructor(fragmentSrc: string, options?: { debug?: boolean, width?: number, height?: number }) {
+    constructor(fragmentSrc: string, options?: { debug?: boolean }) {
         fragmentSrc = formatFragment(fragmentSrc);
-        if (options && options.debug) {
-            console.log(vertexSrc.split("\n").map((v, i) => `${i + 1} : ${v}`).join("\n"));
-            console.log(fragmentSrc.split("\n").map((v, i) => `${i + 1} : ${v}`).join("\n"));
-        }
         super(vertexSrc, fragmentSrc);
+        if (options && options.debug) {
+            this.log(vertexSrc,"[ vertex ] :");
+            this.log(fragmentSrc,"[ fragment ] :");
+        }
         this.iMouse = new egret.Point();
-
+        this.iMouse.setTo(0.5, 0.5);
         this.iTime = this.uniforms["iTime"] = egret.getTimer() / 1000;
         this.iTimeDelta = this.uniforms["iFrame"] = 0;
         this.iFrame = this.uniforms["iTimeDelta"] = 0;
-        this.uniforms["iWidth"] = options && options.width ? options.width : 1.0;
-        this.uniforms["iHeight"] = options && options.height ? options.height : 1.0;
+        // this.uniforms["iWidth"] = options && options.width ? options.width : 1.0;
+        // this.uniforms["iHeight"] = options && options.height ? options.height : 1.0;
         egret.lifecycle.stage.addEventListener(egret.Event.ENTER_FRAME, this.updateRenderer, this);
     }
 
-    set width(v: number) {
-        this.uniforms["iWidth"] = v;
+    private log(code: string,title?:string) {
+        console.log((title?`${title}\n`:"")+code.split("\n").map((v, i) => {
+            let o=(i+1)+'';
+            let total=4-o.length;
+            while(total--) o+="-";
+            return `${o}| ${v}`;
+        }).join("\n"))
     }
-    set height(v: number) {
-        this.uniforms["iHeight"] = v;
-    }
+
+    // set width(v: number) {
+    //     this.uniforms["iWidth"] = v;
+    // }
+    // set height(v: number) {
+    //     this.uniforms["iHeight"] = v;
+    // }
     private updateRenderer() {
         let time = egret.getTimer() / 1000;
         this.iTimeDelta = time - this.iTime;

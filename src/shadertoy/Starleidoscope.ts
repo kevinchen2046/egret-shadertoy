@@ -69,8 +69,8 @@ vec2 N(float angle) {
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     vec2 uv1=vec2(fragCoord.x,fragCoord.y);
-    fragCoord.y*=iHeight/iWidth;
-    fragCoord.y-=(1.-iWidth/iHeight);
+    fragCoord.y*=uTextureSize.y/uTextureSize.x;
+    fragCoord.y-=(1.-uTextureSize.x/uTextureSize.y);
     vec2 uv = (fragCoord - 0.5*iResolution.xy)/iResolution.y;
     vec2 M = (iMouse.xy - iResolution.xy*.5)/iResolution.y;
     float t = iTime * .01;

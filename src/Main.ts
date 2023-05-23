@@ -143,7 +143,7 @@ class Main extends egret.DisplayObjectContainer {
         textfield.y = 135;
         this.textfield = textfield;
 
-        sky.filters = [new ShaderToy(shadertoy.Starleidoscope, { debug: true,width:sky.width,height:sky.height})];
+        sky.filters = [new ShaderToy(shadertoy.Synergy, { debug: true})];
     }
 
     /**

@@ -8,8 +8,8 @@ module shadertoy {
     
     void mainImage( out vec4 fragColor, in vec2 fragCoord,in sampler2D iChannel0){
         vec2 uv=vec2(fragCoord.x,fragCoord.y);
-        fragCoord.y*=iHeight/iWidth;
-        fragCoord.y-=(1.-iWidth/iHeight);
+        fragCoord.y*=uTextureSize.y/uTextureSize.x;
+        fragCoord.y-=(1.-uTextureSize.x/uTextureSize.y);
         vec3 c;
         float l,z=t;
         for(int i=0;i<3;i++) {
