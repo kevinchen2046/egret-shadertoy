@@ -7,8 +7,10 @@ uniform vec2 projectionVector;
 const vec2 center = vec2(-1.0, 1.0);
 varying vec2 vTextureCoord;
 varying vec4 vColor;
+varying vec2 vPosition;
 void main(){
-    gl_Position=vec4((aVertexPosition/projectionVector) + center,0.0,1.0);
+    vPosition=aVertexPosition/projectionVector;
+    gl_Position=vec4(vPosition + center,0.0,1.0);
     vTextureCoord = aTextureCoord;
     vColor = vec4(aColor.x,aColor.x,aColor.x,aColor.x);
 }`
@@ -43,6 +45,7 @@ ${precision}
     
 varying vec2 vTextureCoord;
 varying vec4 vColor;
+varying vec2 vPosition;
 uniform sampler2D uSampler;
 uniform vec2 projectionVector;
 uniform vec2 uTextureSize;

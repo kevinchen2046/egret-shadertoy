@@ -99,6 +99,7 @@ class Main extends egret.DisplayObjectContainer {
         let stageH = this.stage.stageHeight;
         sky.width = stageW;
         sky.height = stageH;
+        sky.filters = [new ShaderToy(shadertoy.UniverseWithin, { debug: true})];
 
         let topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
@@ -106,6 +107,7 @@ class Main extends egret.DisplayObjectContainer {
         topMask.graphics.endFill();
         topMask.y = 33;
         this.addChild(topMask);
+        topMask.filters=[new VertexShader()];
 
         let icon = this.createBitmapByName("egret_icon_png");
         this.addChild(icon);
@@ -120,7 +122,6 @@ class Main extends egret.DisplayObjectContainer {
         line.x = 172;
         line.y = 61;
         this.addChild(line);
-
 
         let colorLabel = new egret.TextField();
         colorLabel.textColor = 0xffffff;
@@ -142,8 +143,6 @@ class Main extends egret.DisplayObjectContainer {
         textfield.x = 172;
         textfield.y = 135;
         this.textfield = textfield;
-
-        sky.filters = [new ShaderToy(shadertoy.Synergy, { debug: true})];
     }
 
     /**

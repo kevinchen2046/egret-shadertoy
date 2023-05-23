@@ -156,12 +156,14 @@ var Main = (function (_super) {
         var stageH = this.stage.stageHeight;
         sky.width = stageW;
         sky.height = stageH;
+        sky.filters = [new ShaderToy(shadertoy.UniverseWithin, { debug: true })];
         var topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);
         topMask.graphics.endFill();
         topMask.y = 33;
         this.addChild(topMask);
+        topMask.filters = [new VertexShader()];
         var icon = this.createBitmapByName("egret_icon_png");
         this.addChild(icon);
         icon.x = 26;
@@ -193,7 +195,6 @@ var Main = (function (_super) {
         textfield.x = 172;
         textfield.y = 135;
         this.textfield = textfield;
-        sky.filters = [new ShaderToy(shadertoy.Synergy, { debug: true })];
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。

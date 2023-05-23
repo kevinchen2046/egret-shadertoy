@@ -8,7 +8,7 @@ var __extends = this && this.__extends || function __extends(t, e) {
 for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
 r.prototype = e.prototype, t.prototype = new r();
 };
-var vertexSrc = "\nattribute vec2 aVertexPosition;    \nattribute vec2 aTextureCoord;\nattribute vec2 aColor;\nuniform vec2 projectionVector;\nconst vec2 center = vec2(-1.0, 1.0);\nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nvoid main(){\n    gl_Position=vec4((aVertexPosition/projectionVector) + center,0.0,1.0);\n    vTextureCoord = aTextureCoord;\n    vColor = vec4(aColor.x,aColor.x,aColor.x,aColor.x);\n}";
+var vertexSrc = "\nattribute vec2 aVertexPosition;    \nattribute vec2 aTextureCoord;\nattribute vec2 aColor;\nuniform vec2 projectionVector;\nconst vec2 center = vec2(-1.0, 1.0);\nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nvarying vec2 vPosition;\nvoid main(){\n    vPosition=aVertexPosition/projectionVector;\n    gl_Position=vec4(vPosition + center,0.0,1.0);\n    vTextureCoord = aTextureCoord;\n    vColor = vec4(aColor.x,aColor.x,aColor.x,aColor.x);\n}";
 function formatFragment(content) {
     var mainImageFuc = "mainImage(gl_FragColor,vTextureCoord);";
     var lines = content.split("\n");
@@ -35,7 +35,7 @@ function formatFragment(content) {
     if (content.indexOf("precision highp float") >= 0) {
         precision = "precision highp float;";
     }
-    return "\n" + precision + "\n    \nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nuniform sampler2D uSampler;\nuniform vec2 projectionVector;\nuniform vec2 uTextureSize;\nuniform float iTime;\nuniform float iTimeDelta;\nuniform float iFrame;\nuniform float mouseX;\nuniform float mouseY;\n// #define fragCoord=vTextureCoord\n#define iResolution vec2(1.0,1.0)\n#define iMouse vec3(mouseX,mouseY,0.5)\n" + content + "\nvoid main(){\n    " + mainImageFuc + "\n}";
+    return "\n" + precision + "\n    \nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\nvarying vec2 vPosition;\nuniform sampler2D uSampler;\nuniform vec2 projectionVector;\nuniform vec2 uTextureSize;\nuniform float iTime;\nuniform float iTimeDelta;\nuniform float iFrame;\nuniform float mouseX;\nuniform float mouseY;\n// #define fragCoord=vTextureCoord\n#define iResolution vec2(1.0,1.0)\n#define iMouse vec3(mouseX,mouseY,0.5)\n" + content + "\nvoid main(){\n    " + mainImageFuc + "\n}";
 }
 /**
  *
