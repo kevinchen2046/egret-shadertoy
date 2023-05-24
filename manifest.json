@@ -8,8 +8,9 @@
 		"libs/modules/promise/promise.js"
 	],
 	"game": [
-		"bin-debug/shadertoy/Introduction.js",
-		"bin-debug/LoadingUI.js",
+		"bin-debug/shadertoy/HappyJumping.js",
+		"bin-debug/FlyingTunnel.js",
+		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
 		"bin-debug/VertexShader.js",
 		"bin-debug/shadertoy/Atansbegone.js",
@@ -17,8 +18,8 @@
 		"bin-debug/shadertoy/Colorello.js",
 		"bin-debug/shadertoy/Flame.js",
 		"bin-debug/shadertoy/FlyingIntoDigitalTunnel .js",
-		"bin-debug/shadertoy/HappyJumping.js",
-		"bin-debug/Main.js",
+		"bin-debug/LoadingUI.js",
+		"bin-debug/shadertoy/Introduction.js",
 		"bin-debug/shadertoy/Octagrams.js",
 		"bin-debug/shadertoy/PathToTheColorfulInfinity.js",
 		"bin-debug/shadertoy/ProteanClouds.js",

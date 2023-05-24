@@ -150,13 +150,14 @@ var Main = (function (_super) {
      * Create a game scene
      */
     Main.prototype.createGameScene = function () {
+        var _this = this;
         var sky = this.createBitmapByName("bg_jpg");
         this.addChild(sky);
         var stageW = this.stage.stageWidth;
         var stageH = this.stage.stageHeight;
         sky.width = stageW;
         sky.height = stageH;
-        sky.filters = [new ShaderToy(shadertoy.Starleidoscope, { debug: true })];
+        // sky.filters = [new ShaderToy(shadertoy.FlyingIntoDigitalTunnel, { debug: true})];
         var topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
         topMask.graphics.drawRect(0, 0, stageW, 172);
@@ -195,6 +196,28 @@ var Main = (function (_super) {
         textfield.x = 172;
         textfield.y = 135;
         this.textfield = textfield;
+        // let item=new FlyingTunnelItem(600,30);
+        // this.stage.addChild(item);
+        // item.x=100;
+        // item.y=400;
+        RES.getResByUrl("resource/bbbb.png", function (texture) {
+            var sheet = new egret.SpriteSheet(texture);
+            for (var i = 0; i < 7; i++) {
+                sheet.createTexture(i + '', 0, 18 * i, texture.textureWidth, 18);
+            }
+            FlyingTunnelBitmap.sheet = sheet;
+            var tunnelEffect = new FlyingTunnel(FlyingTunnelBitmap);
+            _this.stage.addChild(tunnelEffect);
+            tunnelEffect.x = _this.stage.stageWidth / 2;
+            tunnelEffect.y = _this.stage.stageHeight / 2;
+            tunnelEffect.start();
+            tunnelEffect.blendMode = egret.BlendMode.ADD;
+            egret.ticker.$startTick(function (t) {
+                tunnelEffect.scaleX = Math.sin(egret.getTimer() / 1500) * 0.2 + 0.8;
+                tunnelEffect.scaleY = Math.cos(egret.getTimer() / 1100) * 0.2 + 0.8;
+                return true;
+            }, _this);
+        });
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。

@@ -99,7 +99,7 @@ class Main extends egret.DisplayObjectContainer {
         let stageH = this.stage.stageHeight;
         sky.width = stageW;
         sky.height = stageH;
-        sky.filters = [new ShaderToy(shadertoy.Starleidoscope, { debug: true})];
+        // sky.filters = [new ShaderToy(shadertoy.FlyingIntoDigitalTunnel, { debug: true})];
 
         let topMask = new egret.Shape();
         topMask.graphics.beginFill(0x000000, 0.5);
@@ -107,7 +107,7 @@ class Main extends egret.DisplayObjectContainer {
         topMask.graphics.endFill();
         topMask.y = 33;
         this.addChild(topMask);
-        topMask.filters=[new VertexShader()];
+        topMask.filters = [new VertexShader()];
 
         let icon = this.createBitmapByName("egret_icon_png");
         this.addChild(icon);
@@ -143,6 +143,34 @@ class Main extends egret.DisplayObjectContainer {
         textfield.x = 172;
         textfield.y = 135;
         this.textfield = textfield;
+
+        // let item=new FlyingTunnelItem(600,30);
+        // this.stage.addChild(item);
+        // item.x=100;
+        // item.y=400;
+
+        RES.getResByUrl("resource/bbbb.png", (texture: egret.Texture) => {
+
+            let sheet = new egret.SpriteSheet(texture);
+            for (let i = 0; i < 7; i++) {
+                sheet.createTexture(i + '', 0, 18 * i, texture.textureWidth, 18);
+            }
+            FlyingTunnelBitmap.sheet = sheet;
+            let tunnelEffect = new FlyingTunnel(FlyingTunnelBitmap);
+            this.stage.addChild(tunnelEffect);
+            tunnelEffect.x = this.stage.stageWidth / 2;
+            tunnelEffect.y = this.stage.stageHeight / 2;
+            tunnelEffect.start();
+            tunnelEffect.blendMode = egret.BlendMode.ADD;
+
+            egret.ticker.$startTick((t: number) => {
+                tunnelEffect.scaleX = Math.sin(egret.getTimer() / 1500) * 0.2 + 0.8;
+                tunnelEffect.scaleY = Math.cos(egret.getTimer() / 1100) * 0.2 + 0.8;
+                return true;
+            }, this)
+        })
+
+
     }
 
     /**
